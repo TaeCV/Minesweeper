@@ -45,6 +45,7 @@ def main():
     Pause = False
     TimeOver =0
     addition_time = 0
+    FlagAmount = 0
 
     while running:
         for e in pg.event.get():
@@ -62,7 +63,12 @@ def main():
                             elif GameState.ShowingBoard[x][y] and GameState.ScoreBoard[x][y] != 0: # Click on the showing score square to use a special function
                                 GameState.OpenAroundIt(x, y)
                         elif e.button == 3: # Right mouse click
-                            GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
+                            if not GameState.FlagCheck[x][y]: # Add flag
+                                GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
+                                FlagAmount += 1
+                            else: # Remove flag
+                                GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
+                                FlagAmount -= 1
             elif e.type == pg.KEYDOWN:
                 if e.key == pg.K_r: # Reset the game
                     GameState = MinesweeperEngine.GameState(row, col, NumsBomb) # Set up a new board
@@ -89,6 +95,12 @@ def main():
             addition_time = pg.time.get_ticks()
         pg.draw.rect(screen, pg.Color("grey"), pg.Rect(Width-counting_text.get_width()//2-60, 25, counting_text.get_width()+20, counting_text.get_height()+25))
         screen.blit(counting_text, counting_rect)
+        CountingBombleft = str(NumsBomb - FlagAmount).zfill(3)
+        font = pg.font.SysFont(None, 32)
+        CountingBombleft_text = font.render(CountingBombleft, 0, pg.Color("black"))
+        CountingBombleft_rect = CountingBombleft_text.get_rect(center = (50, 50))
+        pg.draw.rect(screen, pg.Color("grey"), pg.Rect(25, 25, 50, CountingBombleft_text.get_height()+25))
+        screen.blit(CountingBombleft_text, CountingBombleft_rect)
         if GameState.ClickBomb:
             ClickOnTheBomb(screen, GameState.board, (x,y), GameState.FlagCheck)
             ShowingText(screen, "lost")
