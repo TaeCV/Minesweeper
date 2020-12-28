@@ -44,6 +44,7 @@ class GameState():
             self.ClickBomb = True
         elif self.board[row][col] == "-":
             self.ShowingBoard[row][col] = True
+            self.FlagCheck[row][col] = False
             self.BoxLeft -= 1
             if self.BoxLeft <= self.NumsBomb:
                 self.Win =True
@@ -83,3 +84,22 @@ class GameState():
                             TempBoard[NewRow][NewCol] += 1
         
         return TempBoard
+
+    def OpenAroundIt(self, row, col):
+        """
+        Special function works when the focusing box has the number of flags arount it equals to its score
+        """
+        Direction = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (-1, 1), (1, -1)]
+        CountingFlag = 0
+        ItsScore = self.ScoreBoard[row][col]
+        for PosX, PosY in Direction:
+            NewRow = row + PosX
+            NewCol = col + PosY
+            if 0 <= NewRow < self.row and 0 <= NewCol < self.col:
+                if self.FlagCheck[NewRow][NewCol]: CountingFlag += 1
+        if CountingFlag == ItsScore:
+            for PosX, PosY in Direction:
+                NewRow = row + PosX
+                NewCol = col + PosY
+                if 0 <= NewRow < self.row and 0 <= NewCol < self.col and not self.FlagCheck[NewRow][NewCol]:
+                    self.CheckOnBoard(NewRow, NewCol)
