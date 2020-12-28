@@ -51,19 +51,21 @@ def main():
             if e.type == pg.QUIT:
                 running = False
             elif e.type == pg.MOUSEBUTTONDOWN:
-                if not GameState.ClickBomb or GameState.Win:                
-                    position = pg.mouse.get_pos()                
-                    x = (position[1]-100) // SQ_size
-                    y = position[0] // SQ_size
-                    if e.button == 1 and not GameState.FlagCheck[x][y]: # Left mouse click and not flaged
-                        GameState.CheckOnBoard(x, y)
-                    elif e.button == 3: # Right mouse click
-                        GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
+                if (not GameState.ClickBomb or GameState.Win) and not Pause:                
+                    position = pg.mouse.get_pos()
+                    if position[1] >= StartRow:            
+                        x = (position[1]-100) // SQ_size
+                        y = position[0] // SQ_size
+                        if e.button == 1 and not GameState.FlagCheck[x][y]: # Left mouse click and not flaged
+                            GameState.CheckOnBoard(x, y)
+                        elif e.button == 3: # Right mouse click
+                            GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
             elif e.type == pg.KEYDOWN:
                 if e.key == pg.K_r: # Reset the game
                     GameState = MinesweeperEngine.GameState(row, col, NumsBomb) # Set up a new board
                     TimeStart = pg.time.get_ticks()
                     TimeOver = 0
+                    Pause = False
                 elif e.key == pg.K_SPACE:
                     Pause = not Pause
                     if not Pause:
