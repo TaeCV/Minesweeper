@@ -120,7 +120,7 @@ def drawBoard(screen, board, FlagCheck, ShowingBoard, ScoreBoard):
                 if ScoreBoard[r][c]:
                     font = pg.font.SysFont("Helvitca", SQ_size*3//4, True, False)
                     Text = font.render(str(ScoreBoard[r][c]), 0, Colors[ScoreBoard[r][c]])
-                    TextLocation = pg.Rect(StartCol + SQ_size*c, StartRow + SQ_size*r, SQ_size, SQ_size).move(SQ_size*3//8, SQ_size*3//8)
+                    TextLocation = Text.get_rect(center = (StartCol + SQ_size*c + SQ_size//2, StartRow + SQ_size*r + SQ_size//2))
                     screen.blit(Text, TextLocation)
 
 def drawLine(screen, board): 
