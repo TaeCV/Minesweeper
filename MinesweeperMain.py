@@ -45,7 +45,6 @@ def main():
     Pause = False
     TimeOver =0
     addition_time = 0
-    FlagAmount = 0
 
     while running:
         for e in pg.event.get():
@@ -65,22 +64,23 @@ def main():
                         elif e.button == 3: # Right mouse click
                             if not GameState.FlagCheck[x][y]: # Add flag
                                 GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
-                                FlagAmount += 1
+                                GameState.BombLeft -= 1
                             else: # Remove flag
                                 GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
-                                FlagAmount -= 1
+                                GameState.BombLeft += 1
             elif e.type == pg.KEYDOWN:
                 if e.key == pg.K_r: # Reset the game
                     GameState = MinesweeperEngine.GameState(row, col, NumsBomb) # Set up a new board
                     TimeStart = pg.time.get_ticks()
                     TimeOver = 0
                     Pause = False
-                    FlagAmount = 0
+
                 elif e.key == pg.K_SPACE:
                     Pause = not Pause
                     if not Pause:
                         TimeOver += pg.time.get_ticks()-addition_time
                         addition_time = 0
+
         screen.fill(pg.Color("white"))
         drawBoardandLine(screen, GameState.board, GameState.FlagCheck, GameState.ShowingBoard, GameState.ScoreBoard)
         if not Pause:
@@ -94,14 +94,16 @@ def main():
             counting_rect = counting_text.get_rect(center = (Width - 50, 50))
         elif addition_time == 0:
             addition_time = pg.time.get_ticks()
+
         pg.draw.rect(screen, pg.Color("grey"), pg.Rect(Width-counting_text.get_width()//2-60, 25, counting_text.get_width()+20, counting_text.get_height()+25))
         screen.blit(counting_text, counting_rect)
-        CountingBombleft = str(NumsBomb - FlagAmount).zfill(3)
+        CountingBombleft = str(GameState.BombLeft).zfill(3)
         font = pg.font.SysFont(None, 32)
         CountingBombleft_text = font.render(CountingBombleft, 0, pg.Color("black"))
         CountingBombleft_rect = CountingBombleft_text.get_rect(center = (50, 50))
         pg.draw.rect(screen, pg.Color("grey"), pg.Rect(25, 25, 50, CountingBombleft_text.get_height()+25))
         screen.blit(CountingBombleft_text, CountingBombleft_rect)
+
         if GameState.ClickBomb:
             ClickOnTheBomb(screen, GameState.board, (x,y), GameState.FlagCheck)
             ShowingText(screen, "lost")
