@@ -56,8 +56,11 @@ def main():
                     if position[1] >= StartRow:            
                         x = (position[1]-100) // SQ_size
                         y = position[0] // SQ_size
-                        if e.button == 1 and not GameState.FlagCheck[x][y]: # Left mouse click and not flaged
-                            GameState.CheckOnBoard(x, y)
+                        if e.button == 1:
+                            if not GameState.FlagCheck[x][y] and not GameState.ShowingBoard[x][y]: # Left mouse click and not flaged
+                                GameState.CheckOnBoard(x, y)
+                            elif GameState.ShowingBoard[x][y] and GameState.ScoreBoard[x][y] != 0: # Click on the showing score square to use a special function
+                                GameState.OpenAroundIt(x, y)
                         elif e.button == 3: # Right mouse click
                             GameState.FlagCheck[x][y] = not GameState.FlagCheck[x][y]
             elif e.type == pg.KEYDOWN:
