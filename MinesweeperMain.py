@@ -75,6 +75,7 @@ def main():
                     TimeStart = pg.time.get_ticks()
                     TimeOver = 0
                     Pause = False
+                    FlagAmount = 0
                 elif e.key == pg.K_SPACE:
                     Pause = not Pause
                     if not Pause:
