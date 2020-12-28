@@ -91,10 +91,10 @@ def main():
         screen.blit(counting_text, counting_rect)
         if GameState.ClickBomb:
             ClickOnTheBomb(screen, GameState.board, (x,y), GameState.FlagCheck)
-            LossText(screen)
+            ShowingText(screen, "lost")
             Pause = True
         if GameState.Win:
-            WinnerText(screen)
+            ShowingText(screen, "win")
             Pause = True
         clock.tick(FPS)
         pg.display.flip()
@@ -162,21 +162,10 @@ def ClickOnTheBomb(screen, board, pos, FlagCheck):
                 screen.blit(Images["bomb"], pg.Rect(StartCol + c * SQ_size, StartRow + r * SQ_size, SQ_size, SQ_size))
                 screen.blit(Images["cross"], pg.Rect(StartCol + c * SQ_size, StartRow + r * SQ_size, SQ_size, SQ_size))
 
-def WinnerText(screen):
-    text = "Congratulation, you are the winner !!"
+def ShowingText(screen, key):
+    text = {"win": "Congratulation, you are the winner !!", "lost" : "Unlucky, you lost! :("}
     font = pg.font.SysFont("Helvitca", 28, True, False)
-    Text = font.render(text, 0, pg.Color("black"))
-    Textbox = pg.Surface((Width//2 + 150, Width//2))
-    Textbox.set_alpha(150)
-    Textbox.fill(pg.Color("green"))
-    screen.blit(Textbox, (Width//4 -75 ,StartRow//2 + Width//4))
-    Text_rect = Text.get_rect(center = (Width//2, Height//2))
-    screen.blit(Text, Text_rect)
-
-def LossText(screen):
-    text = "Unlucky, you lost! :("
-    font = pg.font.SysFont("Helvitca", 28, True, False)
-    Text = font.render(text, 0, pg.Color("black"))
+    Text = font.render(text[key], 0, pg.Color("black"))
     Textbox = pg.Surface((Width//2 + 150, Width//2))
     Textbox.set_alpha(150)
     Textbox.fill(pg.Color("green"))
