@@ -18,6 +18,7 @@ class GameState():
         self.ScoreBoard = self.MakingScoreBoard(row, col)
         self.BoxLeft = row*col
         self.Win = False 
+        self.BombLeft = n
 
     def makeBoard(self, row, col, NumsBomb):
         """
@@ -44,7 +45,9 @@ class GameState():
             self.ClickBomb = True
         elif self.board[row][col] == "-":
             self.ShowingBoard[row][col] = True
-            self.FlagCheck[row][col] = False
+            if self.FlagCheck[row][col]:
+                self.FlagCheck[row][col] = False
+                self.BombLeft += 1
             self.BoxLeft -= 1
             if self.BoxLeft <= self.NumsBomb:
                 self.Win =True
@@ -61,7 +64,9 @@ class GameState():
             NewCol = col + PosY
             if 0 <= NewRow < self.row and 0 <= NewCol < self.col and self.board[NewRow][NewCol] == "-" and not self.ShowingBoard[NewRow][NewCol]:
                 self.ShowingBoard[NewRow][NewCol] = True
-                self.FlagCheck[NewRow][NewCol] = False
+                if self.FlagCheck[NewRow][NewCol]:
+                    self.FlagCheck[NewRow][NewCol] = False
+                    self.BombLeft += 1
                 self.BoxLeft -= 1
                 if self.BoxLeft <= self.NumsBomb:
                     self.Win =True
