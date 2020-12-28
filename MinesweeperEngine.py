@@ -60,6 +60,7 @@ class GameState():
             NewCol = col + PosY
             if 0 <= NewRow < self.row and 0 <= NewCol < self.col and self.board[NewRow][NewCol] == "-" and not self.ShowingBoard[NewRow][NewCol]:
                 self.ShowingBoard[NewRow][NewCol] = True
+                self.FlagCheck[NewRow][NewCol] = False
                 self.BoxLeft -= 1
                 if self.BoxLeft <= self.NumsBomb:
                     self.Win =True
